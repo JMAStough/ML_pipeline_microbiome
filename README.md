@@ -36,8 +36,8 @@ Before you start, please take a look at the `Makefile` for more information abou
 1. Clone the Github Repository and change directory to the project directory. 
 
 ```
-git clone https://github.com/SchlossLab/Topcuoglu_ML_XXX_2019.git
-cd DeepLearning
+git clone https://github.com/SchlossLab/ML_pipeline_microbiome.git
+cd ML_pipeline_microbiome
 ```
 
 2. Our dependencies:
