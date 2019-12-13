@@ -50,7 +50,7 @@ cd ML_pipeline_microbiome
 	
 	* We need to download 2 datasets (OTU abundances and colonoscopy diagnosis of 490 patients) from *Sze MA, Schloss PD. 2018. Leveraging existing 16S rRNA gene surveys to identify reproducible biomarkers in individuals with colorectal tumors. mBio 9:e00630–18. doi:10.1128/mBio.00630-18* by running:
 	
-		```bash code/learning/load_datasets.batch``` 
+		```bash code/bash/load_datasets.batch``` 
 	
 	* We update the `caret` package with my modifications by running (Take a look at this script to change the R packages directory where `caret` is installed.):
 	
@@ -65,7 +65,7 @@ cd ML_pipeline_microbiome
 	1. Run the ML pipeline once (using seed=1) using L2-regularized logistic regression: (Using a different seed will result in the dataset to be split to 80 training set - 20 testing set differently. Different seeds will give slightly different results.)
 	
 		```
-		Rscript code/learning/main.R 1 "L2_Logistic_Regression"
+		Rscript code/R/main.R 1 "L2_Logistic_Regression"
 		```
 	
 	The `main.R` function accepts 7 different models that needs to call models as:
@@ -80,9 +80,9 @@ cd ML_pipeline_microbiome
 	So if you want to use a random forest model you'll run:
 	
 		
-	`Rscript code/learning/main.R 1 "Random_Forest"`
+	`Rscript code/R/main.R 1 "Random_Forest"`
 	
-	`code/learning/main.R` is an R script that (i) prepares the data to plug into the ML pipeline, (ii) uses the 1st argument to set a seed,(iii) uses the 2nd argument to start running the pipeline with the model type (`get_results` function is called for this) and (iv) keep track of walltime.
+	`code/R/main.R` is an R script that (i) prepares the data to plug into the ML pipeline, (ii) uses the 1st argument to set a seed,(iii) uses the 2nd argument to start running the pipeline with the model type (`get_results` function is called for this) and (iv) keep track of walltime.
 	     
 	 2. `Rscript code/learning/main.R` sources 4 other scripts that are part of the pipeline. 
 	 
@@ -91,25 +91,25 @@ cd ML_pipeline_microbiome
 		
 		Depending on your ML task, the model hyperparameter range to tune will be different. This is hard-coded for our study but will be updated to integrate user-defined range in the future (Issue # 10)
 	 
-	 	* To preprocess and split the dataset 80-20 and to train the model: `source('code/learning/model_pipeline.R')`
+	 	* To preprocess and split the dataset 80-20 and to train the model: `source('code/R/model_pipeline.R')`
 	 
-	 	* To save the results of each model for each datasplit: `source('code/learning/generateAUCs.R')`
+	 	* To save the results of each model for each datasplit: `source('code/R/generateAUCs.R')`
 	 
-	 	* To interpret the models: `source('code/learning/permutation_importance.R')`
+	 	* To interpret the models: `source('code/R/permutation_importance.R')`
 	
 	 3. We want to run the pipeline 100 times with different seeds so that we can evaluate variability in modeling results. We can do this in many different ways. 
 	
 		1. Run the scripts one by one with different seeds:
 	
-			```Rscript code/learning/main.R 1 "L2_Logistic_Regression"```
+			```Rscript code/R/main.R 1 "L2_Logistic_Regression"```
 	
-			```Rscript code/learning/main.R 2 "L2_Logistic_Regression"```
+			```Rscript code/R/main.R 2 "L2_Logistic_Regression"```
 	
-			```Rscript code/learning/main.R 3 "L2_Logistic_Regression"```
+			```Rscript code/R/main.R 3 "L2_Logistic_Regression"```
 			
 						`...`
 						
-			```Rscript code/learning/main.R 100 "L2_Logistic_Regression"```
+			```Rscript code/R/main.R 100 "L2_Logistic_Regression"```
 	
 				However, this is time-consuming and not DRY.
 	
@@ -117,7 +117,7 @@ cd ML_pipeline_microbiome
 	
 	4. After we run the pipeline 100 times, we will have saved 100 files for AUROC values, 100 files for training times, 100 files for AUROC values for each tuned hyperparameter, 100 files for feature importances of perfectly correlated features, 100 files for feature importances of non-perfectly correlated features. These files will all be saved to `data/temp`. We need to merge these files.
 	
-		`bash cat_csv_files.sh`
+		`bash code/bash/cat_csv_files.sh`
 			
 	
 		This script will save combined files to `data/process`. 
